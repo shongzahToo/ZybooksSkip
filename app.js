@@ -8,10 +8,16 @@ Array.from(document.querySelectorAll(".title")).filter(x => x.innerHTML == "Star
         $("*").animate({}, 0)
     }, 1);
 })
-var test = document.querySelector(".definition-match-payload")
-if(test != null) {
-    test.scrollIntoView({behavior:"smooth"})
+
+document.querySelector(".assignment-completion-summary-card").querySelector("button").click()
+
+var matchQuestions = document.querySelector(".definition-match-payload")
+if(matchQuestions != null) {
+    matchQuestions.scrollIntoView({behavior:"smooth"})
+} else {
+    document.querySelector(".next").scrollIntoView({behavior:"smooth"})
 }
+
 setTimeout(() => {
     Array.from(document.querySelectorAll(".pause-button")).forEach(element => {
         const observer = new MutationObserver((mutationsList) => {
