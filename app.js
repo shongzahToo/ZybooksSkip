@@ -4,13 +4,14 @@ Array.from(document.querySelectorAll(".zb-checkbox")).forEach(el => {
 })
 Array.from(document.querySelectorAll(".title")).filter(x => x.innerHTML == "Start").forEach(element => {
     element.click()
+    setTimeout(() => {
+        $("*").animate({}, 0)
+    }, 1);
 })
-
 var test = document.querySelector(".definition-match-payload")
 if(test != null) {
     test.scrollIntoView({behavior:"smooth"})
 }
-
 setTimeout(() => {
     Array.from(document.querySelectorAll(".pause-button")).forEach(element => {
         const observer = new MutationObserver((mutationsList) => {
@@ -20,7 +21,9 @@ setTimeout(() => {
                         observer.disconnect()
                     } else if (element.classList.contains('play-button')) {
                         element.click()
-                        $("*").animate({}, 0)
+                        setTimeout(() => {
+                            $("*").animate({}, 0)
+                        }, 1);
                     }
                 }
             })
