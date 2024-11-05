@@ -11,12 +11,12 @@ Array.from(document.querySelectorAll(".title")).filter(x => x.innerHTML == "Star
 
 document.querySelector(".assignment-completion-summary-card").querySelector("button").click()
 
-var matchQuestions = document.querySelector(".definition-match-payload")
-if(matchQuestions != null) {
-    matchQuestions.scrollIntoView({behavior:"smooth"})
-} else {
-    document.querySelector(".next").scrollIntoView({behavior:"smooth"})
-}
+// var matchQuestions = document.querySelector(".definition-match-payload")
+// if(matchQuestions != null) {
+//     matchQuestions.scrollIntoView({behavior:"smooth"})
+// } else {
+//     document.querySelector(".next").scrollIntoView({behavior:"smooth"})
+// }
 
 setTimeout(() => {
     Array.from(document.querySelectorAll(".pause-button")).forEach(element => {
@@ -89,3 +89,73 @@ Array.from(document.querySelectorAll(".short-answer-question")).forEach(el => {
         el.querySelector(".check-button").click()
     }, 100);
 })
+
+
+function simulateDragAndDrop(draggable, target) {
+    const dragStartEvent = new DragEvent('dragstart', {
+      bubbles: true,
+      cancelable: true,
+      dataTransfer: new DataTransfer(),
+    });
+    draggable.dispatchEvent(dragStartEvent);
+  
+    const dragEnterEvent = new DragEvent('dragenter', {
+      bubbles: true,
+      cancelable: true,
+      dataTransfer: dragStartEvent.dataTransfer,
+    });
+    target.dispatchEvent(dragEnterEvent);
+  
+    const dragOverEvent = new DragEvent('dragover', {
+      bubbles: true,
+      cancelable: true,
+      dataTransfer: dragStartEvent.dataTransfer,
+    });
+    target.dispatchEvent(dragOverEvent);
+  
+    const dropEvent = new DragEvent('drop', {
+      bubbles: true,
+      cancelable: true,
+      dataTransfer: dragStartEvent.dataTransfer,
+    });
+    target.dispatchEvent(dropEvent);
+  
+    const dragEndEvent = new DragEvent('dragend', {
+      bubbles: true,
+      cancelable: true,
+      dataTransfer: dragStartEvent.dataTransfer,
+    });
+    draggable.dispatchEvent(dragEndEvent);
+  }
+
+
+function solveNextDraggable(numberDrag) {
+    var el = document.querySelectorAll(".definition-row")[numberDrag]
+    var container = el.parentElement
+    var draggable = container.querySelector('.draggable-object');
+    var target = el.querySelector('.term-bucket');
+    const observer = new MutationObserver((mutationsList) => {
+        mutationsList.forEach((mutation) => {
+            if(mutation.addedNodes.length > 0) {
+                if(mutation.addedNodes[0].classList != null) {
+                    mutation.addedNodes.forEach(element => {
+                            if (element.innerHTML == "Incorrect") {
+                                draggable = container.querySelector('.draggable-object');
+                                target = el.querySelector('.term-bucket');
+                                simulateDragAndDrop(draggable, target);
+                            } else if (!element.innerHTML == "Correct") {
+                                
+                            } else {
+                                solveNextDraggable(numberDrag+1)
+                            }
+                    })
+                }
+            }
+        })
+    })
+    observer.observe(el.querySelector(".definition-match-explanation"), {childList: true,  attributes: true })
+    simulateDragAndDrop(draggable, target);
+
+}
+
+solveNextDraggable(0)
