@@ -1,10 +1,16 @@
+jQuery.fx.off = true; 
 Array.from(document.querySelectorAll(".zb-checkbox")).forEach(el => {
     el.children[0].click()
 })
 Array.from(document.querySelectorAll(".title")).filter(x => x.innerHTML == "Start").forEach(element => {
     element.click()
 })
-document.querySelector(".definition-match-payload").scrollIntoView({behavior:"smooth"})
+
+var test = document.querySelector(".definition-match-payload")
+if(test != null) {
+    test.scrollIntoView({behavior:"smooth"})
+}
+
 setTimeout(() => {
     Array.from(document.querySelectorAll(".pause-button")).forEach(element => {
         const observer = new MutationObserver((mutationsList) => {
@@ -14,6 +20,7 @@ setTimeout(() => {
                         observer.disconnect()
                     } else if (element.classList.contains('play-button')) {
                         element.click()
+                        $("*").animate({}, 0)
                     }
                 }
             })
@@ -46,10 +53,10 @@ function setupMultipleChoiceMutationObservers() {
 function handleRadio() {
     if(Array.from(document.querySelectorAll(".multiple-choice-question")).length != 0) {
         Array.from(document.querySelectorAll(".multiple-choice-question")).forEach(el => {
-            if(el.querySelector(".zb-explanation").className.includes("incorrect")) {
+            if(el.querySelector(".zb-explanation") != null && el.querySelector(".zb-explanation").className.includes("incorrect")) {
                 el.setAttribute("guessedQuestion", parseInt(el.getAttribute("guessedQuestion")) + 1)
                 Array.from(el.querySelectorAll(".zb-radio-button"))[el.getAttribute("guessedQuestion")].children[0].click()
-            } else if(!el.querySelector(".zb-explanation").className.includes("correct")) {
+            } else if(el.querySelector(".zb-explanation") != null && !el.querySelector(".zb-explanation").className.includes("correct")) {
                 Array.from(el.querySelectorAll(".zb-radio-button"))[0].children[0].click()
                 el.setAttribute("guessedQuestion", 0)
             }
